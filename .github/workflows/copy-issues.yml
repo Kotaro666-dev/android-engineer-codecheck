@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Getting Labels data
       id: get_label_data
-      uses: octokit/request-action@v2.1.0
+      uses: octokit/request-action@v2.1.7
       with:
         route: GET /repos/yumemi-inc/android-engineer-codecheck/labels
       env:
@@ -25,11 +25,11 @@ jobs:
     needs: get-issue-labels
     runs-on: ubuntu-latest
     strategy:
-      matrix: 
+      matrix:
         label: ${{ fromJson(needs.get-issue-labels.outputs.labels) }}
     steps:
     - name: Create a label
-      uses: octokit/request-action@v2.1.0
+      uses: octokit/request-action@v2.1.7
       with:
         route: POST /repos/${{ github.repository }}/labels
         name: ${{ matrix.label.name }}
@@ -37,7 +37,7 @@ jobs:
         description: ${{ matrix.label.description }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+
   get-milestones:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
     steps:
     - name: Getting Milestones data
       id: get_milestones_data
-      uses: octokit/request-action@v2.1.0
+      uses: octokit/request-action@v2.1.7
       with:
         route: GET /repos/yumemi-inc/android-engineer-codecheck/milestones
       env:
@@ -60,11 +60,11 @@ jobs:
     needs: get-milestones
     runs-on: ubuntu-latest
     strategy:
-      matrix: 
+      matrix:
         milestone: ${{ fromJson(needs.get-milestones.outputs.milestones) }}
     steps:
     - name: Create a milestone
-      uses: octokit/request-action@v2.1.0
+      uses: octokit/request-action@v2.1.7
       with:
         route: POST /repos/${{ github.repository }}/milestones
         title: ${{ matrix.milestone.title }}
@@ -80,7 +80,7 @@ jobs:
     steps:
     - name: Getting Milestones data
       id: get_milestones_data
-      uses: octokit/request-action@v2.1.0
+      uses: octokit/request-action@v2.1.7
       with:
         route: GET /repos/${{ github.repository }}/milestones
       env:
@@ -98,7 +98,7 @@ jobs:
     steps:
     - name: Getting issues data
       id: get_issues_data
-      uses: octokit/request-action@v2.1.0
+      uses: octokit/request-action@v2.1.7
       with:
         route: GET /repos/yumemi-inc/android-engineer-codecheck/issues
         sort: created
@@ -119,7 +119,7 @@ jobs:
     steps:
     - name: Getting issues data
       id: get_issues_data
-      uses: octokit/request-action@v2.1.0
+      uses: octokit/request-action@v2.1.7
       with:
         route: GET /repos/${{ github.repository }}/issues
         state: all
@@ -137,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
-      matrix: 
+      matrix:
         issue: ${{ fromJson(needs.get-issues.outputs.issues) }}
     steps:
     - name: Find milestone
@@ -152,7 +152,7 @@ jobs:
         body=$(echo '${{ matrix.issue.body }}')
         body="${body//$'\n'/\\n}"
         body="${body//$'\r'/\\r}"
-        
+
         if [[ "$body" =~ '#'[0-9] ]]; then
             link=$(echo "$body" | grep -o "#[0-9]")
             num=$(echo $link | tr -d '#')
